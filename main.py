@@ -1,25 +1,46 @@
+import argparse
+import logging
+from pathlib import Path
+from typing import Optional
+import json
 from src.file_concealment.folder_editor.gui import FileManagerApp
 
-if __name__ == "__main__":
-    import sys
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="File Manager Application")
+    parser.add_argument("-j", "--json-file", default="config/folder paths.JSON", help="Path to the JSON file")
+    parser.add_argument("-k", "--json-key", default="hidden_folders", help="Key for the JSON data")
+    parser.add_argument("-p", "--powershell-script", default="scripts/folder concealer.ps1", help="Path to the PowerShell script")
+    parser.add_argument("-i", "--icon-path", default="assets/bugatti_logo_1.png", help="Path to the application icon")
+    return parser.parse_args()
 
-    # Use command-line argument for JSON file path if provided, otherwise use default
-    json_file_path = sys.argv[1] if len(sys.argv) > 1 else r"config/folder paths.JSON"
-    json_key = sys.argv[2] if len(sys.argv) > 2 else "hidden_folders"
-    powershell_script = sys.argv[3] if len(
-        sys.argv) > 3 else r"file_concealment/folder concealer.ps1"
-    icon_path = sys.argv[4] if len(
-        sys.argv) > 3 else r"assets/bugatti_logo_1.png"
+def load_configuration(config_file: Path) -> Optional[dict]:
+    try:
+        with config_file.open("r") as f:
+            import json
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        logging.error(f"Error loading configuration file: {e}")
+    return None
+
+def main():
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
+    args = parse_arguments()
+    config = load_configuration(Path(args.json_file))
+
+    if config is None:
+        logging.error("Failed to load configuration. Exiting...")
+        return
 
     try:
-        app = FileManagerApp(json_file_path, json_key,powershell_script, icon_path)
+        app = FileManagerApp(args.json_file, args.json_key, args.powershell_script, args.icon_path)
         app.mainloop()
     except KeyboardInterrupt:
-        print("\nProgram interrupted by user. Exiting gracefully...")
-        app.destroy()  # Ensure all tkinter windows are closed
-        sys.exit(0)  # Exit with a success status code
+        logging.info("Program interrupted by user. Exiting gracefully...")
+        app.destroy()
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-        sys.exit(1)  # Exit with an error status code
+        logging.error(f"An unexpected error occurred: {e}", exc_info=True)
 
+if __name__ == "__main__":
+    main()
 
