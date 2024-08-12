@@ -13,3 +13,5 @@ foreach ($folder in $jsonContent.hidden_folders) {
 reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v Hidden /t REG_DWORD /d 2 /f
 reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v ShowSuperHidden /t REG_DWORD /d 0 /f
 #powershell -c gps 'explorer' ^| stop-process
+
+# no no
