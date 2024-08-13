@@ -5,6 +5,7 @@ from src.file_concealment.folder_editor.powershell_runner import PowerShellRunne
 from src.file_concealment.folder_editor.file_system_handler import FileSystemHandler
 from src.file_concealment.folder_editor.json_editor import JsonEditor
 from PIL import Image, ImageTk  # You'll need to install pillow: pip install pillow
+from src.file_concealment.folder_concealer import FolderHider
 
 
 class FileManagerApp(tk.Tk):
@@ -20,6 +21,7 @@ class FileManagerApp(tk.Tk):
         self.json_key = json_key
         self.paths = self.json_editor.get_entry(self.json_key) or []
         self.powershell_runner = PowerShellRunner(powershell_script)
+        self.folder_hider = FolderHider(json_file)
 
         self.set_window_icon(icon_path)
         self.create_widgets()
@@ -59,8 +61,8 @@ class FileManagerApp(tk.Tk):
         button_frame = ttk.Frame(self)
         button_frame.pack(padx=10, pady=10, fill=tk.X)
 
-        # Run PowerShell script button
-        run_script_btn = ttk.Button(button_frame, text="Run PowerShell Script", command=self.run_powershell_script)
+        # Run Folder Hider button
+        run_script_btn = ttk.Button(button_frame, text="Run Folder Hider", command=self.run_folder_hider)
         run_script_btn.pack(side=tk.LEFT, padx=5)
 
         # Check paths button
@@ -88,6 +90,14 @@ class FileManagerApp(tk.Tk):
             messagebox.showinfo("PowerShell Script", f"Script executed successfully.\nOutput: {stdout}")
         else:
             messagebox.showerror("PowerShell Script Error", f"Script failed with error code {return_code}.\nError: {stderr}")
+
+    def run_folder_hider(self) -> None:
+        """Run folder hider."""
+        result, message = self.folder_hider.run()
+        if result:
+            messagebox.showinfo("Folder Hider", f" Runner executed successfully.\nOutput: {message}")
+        else:
+            messagebox.showerror("Folder Hider Error", f" Opps, something went wrong \nError: {message}")
 
     def check_paths(self) -> None:
         """Check if all paths are valid using FileSystemHandler."""
