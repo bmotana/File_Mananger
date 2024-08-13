@@ -45,6 +45,10 @@ class FolderHider:
                                     0)
 
     def run(self):
-        self.hide_folders()
-        self.update_registry()
+        try:
+            self.hide_folders()
+            self.update_registry()
+            return True, "Folders hidden!"
+        except Exception as e:
+            return False, f"Error hiding folders: {e}"
 
