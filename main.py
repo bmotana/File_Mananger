@@ -7,7 +7,7 @@ from src.file_concealment.folder_editor.gui import FileManagerApp
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="File Manager Application")
-    parser.add_argument("-j", "--json-file", default="config/folder paths.JSON", help="Path to the JSON file")
+    parser.add_argument("-j", "--json-file", default="config/folder_paths.JSON", help="Path to the JSON file")
     parser.add_argument("-k", "--json-key", default="hidden_folders", help="Key for the JSON data")
     parser.add_argument("-p", "--powershell-script", default="scripts/folder concealer.ps1", help="Path to the PowerShell script")
     parser.add_argument("-i", "--icon-path", default="assets/bugatti_logo_1.png", help="Path to the application icon")
