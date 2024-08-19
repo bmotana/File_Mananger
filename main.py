@@ -22,7 +22,18 @@ def load_configuration(config_file: Path) -> Optional[dict]:
         logging.error(f"Error loading configuration file: {e}")
     return None
 
+# main.py
 def main():
+    """
+    Main entry point of the application.
+
+    This function handles the following tasks:
+    1. Configures the logging system.
+    2. Parses command-line arguments.
+    3. Loads the application configuration.
+    4. Initializes and runs the File Manager application.
+    5. Handles keyboard interrupts and unexpected exceptions.
+    """
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
     args = parse_arguments()
@@ -35,11 +46,12 @@ def main():
     try:
         app = FileManagerApp(args.json_file, args.json_key, args.powershell_script, args.icon_path)
         app.mainloop()
-    except KeyboardInterrupt:
-        logging.info("Program interrupted by user. Exiting gracefully...")
-        app.destroy()
+    except ConfigurationError as e:
+        logging.error(str(e))
+        print("Please check your configuration file and try again.")
     except Exception as e:
         logging.error(f"An unexpected error occurred: {e}", exc_info=True)
+        print("An unexpected error occurred. Please try again later.")
 
 if __name__ == "__main__":
     main()
