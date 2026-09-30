@@ -1,5 +1,4 @@
 import os
-from typing import Union, List
 
 
 class FileSystemHandler:
@@ -52,7 +51,7 @@ class FileSystemHandler:
         """
         return os.path.isdir(self.path)
 
-    def list_contents(self) -> Union[List[str], None]:
+    def list_contents(self) -> list[str] | None:
         """
         List the contents of the folder if the path is a directory.
 

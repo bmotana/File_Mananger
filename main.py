@@ -1,9 +1,12 @@
 import argparse
+import json
 import logging
 from pathlib import Path
-from typing import Optional
-import json
+
 from src.file_concealment.folder_editor.gui import FileManagerApp
+
+logger = logging.getLogger(__name__)
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="File Manager Application")
@@ -13,13 +16,12 @@ def parse_arguments():
     parser.add_argument("-i", "--icon-path", default="assets/bugatti_logo_1.png", help="Path to the application icon")
     return parser.parse_args()
 
-def load_configuration(config_file: Path) -> Optional[dict]:
+def load_configuration(config_file: Path) -> dict | None:
     try:
         with config_file.open("r") as f:
-            import json
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError) as e:
-        logging.error(f"Error loading configuration file: {e}")
+        logger.error("Error loading configuration file: %s", e)
     return None
 
 # main.py
@@ -40,17 +42,14 @@ def main():
     config = load_configuration(Path(args.json_file))
 
     if config is None:
-        logging.error("Failed to load configuration. Exiting...")
+        logger.error("Failed to load configuration. Exiting...")
         return
 
     try:
         app = FileManagerApp(args.json_file, args.json_key, args.powershell_script, args.icon_path)
         app.mainloop()
-    except ConfigurationError as e:
-        logging.error(str(e))
-        print("Please check your configuration file and try again.")
-    except Exception as e:
-        logging.error(f"An unexpected error occurred: {e}", exc_info=True)
+    except Exception:
+        logger.exception("An unexpected error occurred")
         print("An unexpected error occurred. Please try again later.")
 
 if __name__ == "__main__":

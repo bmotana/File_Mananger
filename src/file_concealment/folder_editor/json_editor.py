@@ -1,5 +1,5 @@
 import json
-from typing import Dict, Any, Union
+from typing import Any
 
 
 class JsonEditor:
@@ -21,7 +21,7 @@ class JsonEditor:
         except (FileNotFoundError, json.JSONDecodeError) as e:
             print(f"Error saving JSON file: {e}")
 
-    def read(self) -> Dict[str, Any]:
+    def read(self) -> dict[str, Any]:
         """
         Read and return the JSON data.
 
@@ -41,7 +41,7 @@ class JsonEditor:
         self.json_data[key] = value
         self.save()
 
-    def get_entry(self, key: str) -> Union[Any, None]:
+    def get_entry(self, key: str) -> Any | None:
         """
         Get the value of an entry in the JSON data.
         """

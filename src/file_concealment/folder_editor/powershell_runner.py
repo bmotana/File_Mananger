@@ -1,4 +1,3 @@
-from typing import Tuple
 import subprocess
 
 
@@ -8,7 +7,7 @@ class PowerShellRunner:
     def __init__(self, script_path: str):
         self.script_path = script_path
 
-    def run_script(self) -> Tuple[str, str, int]:
+    def run_script(self) -> tuple[str, str, int]:
         """
         Run the PowerShell script.
 

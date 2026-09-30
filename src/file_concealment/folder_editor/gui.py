@@ -1,17 +1,19 @@
-from tkinter import *
 import tkinter as tk
-from tkinter import ttk, messagebox, filedialog
-from src.file_concealment.folder_editor.powershell_runner import PowerShellRunner
+from tkinter import *
+from tkinter import filedialog, messagebox, ttk
+
+from PIL import Image, ImageTk  # You'll need to install pillow: pip install pillow
+
+from src.file_concealment.folder_concealer import FolderHider
 from src.file_concealment.folder_editor.file_system_handler import FileSystemHandler
 from src.file_concealment.folder_editor.json_editor import JsonEditor
-from PIL import Image, ImageTk  # You'll need to install pillow: pip install pillow
-from src.file_concealment.folder_concealer import FolderHider
+from src.file_concealment.folder_editor.powershell_runner import PowerShellRunner
 
 
 class FileManagerApp(tk.Tk):
     """Main application class for the File Manager GUI."""
 
-    def __init__(self, json_file: str, json_key: str, powershell_script: str, icon_path: str = None):
+    def __init__(self, json_file: str, json_key: str, powershell_script: str, icon_path: str | None = None):
         super().__init__()
 
         self.title("File Manager")
@@ -36,7 +38,7 @@ class FileManagerApp(tk.Tk):
                     icon = Image.open(icon_path)
                     icon = ImageTk.PhotoImage(icon)
                     self.iconphoto(True, icon)
-            except Exception as e:
+            except (OSError, tk.TclError, ValueError) as e:
                 print(f"Error setting icon: {e}")
 
     def create_widgets(self) -> None:

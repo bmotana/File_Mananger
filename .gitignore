@@ -1,5 +1,43 @@
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+htmlcov/
+.coverage
+.coverage.*
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Local configuration and secrets
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.*
+
+# Logs and runtime data
 *.log
 testing/
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini

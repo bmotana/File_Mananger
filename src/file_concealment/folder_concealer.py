@@ -1,8 +1,8 @@
-import json
 import os
 import stat
 import subprocess
 import winreg
+
 from src.file_concealment.folder_editor.json_editor import JsonEditor
 
 
@@ -33,7 +33,7 @@ class FolderHider:
     def set_registry_value(key_path, value_name, value_data):
         try:
             key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_ALL_ACCESS)
-        except WindowsError:
+        except OSError:
             key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path)
         winreg.SetValueEx(key, value_name, 0, winreg.REG_DWORD, value_data)
         winreg.CloseKey(key)
@@ -49,6 +49,6 @@ class FolderHider:
             self.hide_folders()
             self.update_registry()
             return True, "Folders hidden!"
-        except Exception as e:
+        except (OSError, KeyError, TypeError) as e:
             return False, f"Error hiding folders: {e}"
 
